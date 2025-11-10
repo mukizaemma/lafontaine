@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::share('categories', Category::with('blogs')->oldest()->get());
-        View::share('slides', Slide::oldest()->get());
-        View::share('programs', Program::oldest()->get());
-        View::share('setting', Setting::first());
+        //View::share('categories', Category::with('blogs')->oldest()->get());
+        //View::share('slides', Slide::oldest()->get());
+        //View::share('programs', Program::oldest()->get());
+        //View::share('setting', Setting::first());
     }
 }
