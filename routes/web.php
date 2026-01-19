@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -163,10 +164,112 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/deleteEvent/{id}', [App\Http\Controllers\EventsController::class, 'destroy'])->name('deleteEvent');
     Route::get('/Event/{event}/publish', [App\Http\Controllers\EventsController::class, 'publishEvent'])->name('publishEvent');
     
+    // CMS Pages
+    Route::resource('pages', App\Http\Controllers\Admin\PageController::class)->names([
+        'index' => 'admin.pages.index',
+        'create' => 'admin.pages.create',
+        'store' => 'admin.pages.store',
+        'show' => 'admin.pages.show',
+        'edit' => 'admin.pages.edit',
+        'update' => 'admin.pages.update',
+        'destroy' => 'admin.pages.destroy',
+    ]);
+
+    // Hero Sections
+    Route::resource('hero-sections', App\Http\Controllers\Admin\HeroSectionController::class)->names([
+        'index' => 'admin.hero-sections.index',
+        'create' => 'admin.hero-sections.create',
+        'store' => 'admin.hero-sections.store',
+        'show' => 'admin.hero-sections.show',
+        'edit' => 'admin.hero-sections.edit',
+        'update' => 'admin.hero-sections.update',
+        'destroy' => 'admin.hero-sections.destroy',
+    ]);
+
+    // Courses
+    Route::resource('courses', App\Http\Controllers\Admin\CourseController::class)->names([
+        'index' => 'admin.courses.index',
+        'create' => 'admin.courses.create',
+        'store' => 'admin.courses.store',
+        'show' => 'admin.courses.show',
+        'edit' => 'admin.courses.edit',
+        'update' => 'admin.courses.update',
+        'destroy' => 'admin.courses.destroy',
+    ]);
+
+    // Course Registrations
+    Route::resource('course-registrations', App\Http\Controllers\Admin\CourseRegistrationController::class)->names([
+        'index' => 'admin.course-registrations.index',
+        'create' => 'admin.course-registrations.create',
+        'store' => 'admin.course-registrations.store',
+        'show' => 'admin.course-registrations.show',
+        'edit' => 'admin.course-registrations.edit',
+        'update' => 'admin.course-registrations.update',
+        'destroy' => 'admin.course-registrations.destroy',
+    ]);
+    Route::post('/course-registrations/{courseRegistration}/approve', [App\Http\Controllers\Admin\CourseRegistrationController::class, 'approve'])->name('admin.course-registrations.approve');
+    Route::post('/course-registrations/{courseRegistration}/reject', [App\Http\Controllers\Admin\CourseRegistrationController::class, 'reject'])->name('admin.course-registrations.reject');
+
+    // Authors
+    Route::resource('authors', App\Http\Controllers\Admin\AuthorController::class)->names([
+        'index' => 'admin.authors.index',
+        'create' => 'admin.authors.create',
+        'store' => 'admin.authors.store',
+        'show' => 'admin.authors.show',
+        'edit' => 'admin.authors.edit',
+        'update' => 'admin.authors.update',
+        'destroy' => 'admin.authors.destroy',
+    ]);
+
+    // Partnership Requests
+    Route::resource('partnership-requests', App\Http\Controllers\Admin\PartnershipRequestController::class)->only(['index', 'show', 'edit', 'update', 'destroy'])->names([
+        'index' => 'admin.partnership-requests.index',
+        'show' => 'admin.partnership-requests.show',
+        'edit' => 'admin.partnership-requests.edit',
+        'update' => 'admin.partnership-requests.update',
+        'destroy' => 'admin.partnership-requests.destroy',
+    ]);
+    Route::post('/partnership-requests/{partnershipRequest}/approve', [App\Http\Controllers\Admin\PartnershipRequestController::class, 'approve'])->name('admin.partnership-requests.approve');
+    Route::post('/partnership-requests/{partnershipRequest}/reject', [App\Http\Controllers\Admin\PartnershipRequestController::class, 'reject'])->name('admin.partnership-requests.reject');
+
+    // Contact Messages
+    Route::resource('contact-messages', App\Http\Controllers\Admin\ContactMessageController::class)->only(['index', 'show', 'update', 'destroy'])->names([
+        'index' => 'admin.contact-messages.index',
+        'show' => 'admin.contact-messages.show',
+        'update' => 'admin.contact-messages.update',
+        'destroy' => 'admin.contact-messages.destroy',
+    ]);
+
+    // Media Library
+    Route::resource('media', App\Http\Controllers\Admin\MediaController::class)->names([
+        'index' => 'admin.media.index',
+        'create' => 'admin.media.create',
+        'store' => 'admin.media.store',
+        'show' => 'admin.media.show',
+        'destroy' => 'admin.media.destroy',
+    ]);
+
+    // Impact Stats
+    Route::resource('impact-stats', App\Http\Controllers\Admin\ImpactStatController::class)->names([
+        'index' => 'admin.impact-stats.index',
+        'create' => 'admin.impact-stats.create',
+        'store' => 'admin.impact-stats.store',
+        'show' => 'admin.impact-stats.show',
+        'edit' => 'admin.impact-stats.edit',
+        'update' => 'admin.impact-stats.update',
+        'destroy' => 'admin.impact-stats.destroy',
+    ]);
 
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Public CMS Pages
+Route::get('/page/{slug}', [App\Http\Controllers\HomeController::class, 'showPage'])->name('page.show');
+
+// Public Courses
+Route::get('/courses', [App\Http\Controllers\HomeController::class, 'coursesIndex'])->name('courses.index');
+Route::get('/courses/{id}', [App\Http\Controllers\HomeController::class, 'showCourse'])->name('courses.show');
 Route::get('/topics/category/{slug}', [App\Http\Controllers\HomeController::class, 'categoryBlogs'])->name('categoryBlogs');
 
 Route::get('/blog', [App\Http\Controllers\HomeController::class, 'blogs'])->name('blogs');
@@ -184,6 +287,7 @@ Route::get('/programs', [App\Http\Controllers\HomeController::class, 'programs']
 Route::get('/program/{slug}', [App\Http\Controllers\HomeController::class, 'program'])->name('program');
 Route::get('/connect', [App\Http\Controllers\HomeController::class, 'connect'])->name('connect');
 
+Route::get('/about', [App\Http\Controllers\HomeController::class, 'aboutus'])->name('about');
 Route::get('/books', [App\Http\Controllers\HomeController::class, 'books'])->name('books');
 Route::get('/books/{slug}', [App\Http\Controllers\HomeController::class, 'book'])->name('bookOpen');
 Route::post('/confirm-reading', [App\Http\Controllers\HomeController::class, 'confirmReading'])->name('confirmReading');
@@ -209,3 +313,44 @@ Route::post('/bookComment', [App\Http\Controllers\HomeController::class, 'bookCo
 Route::post('/registerNow', [App\Http\Controllers\HomeController::class, 'registerNow'])->name('registerNow');
 Route::post('/testimony', [App\Http\Controllers\HomeController::class, 'testimony'])->name('testimony');
 
+// Public Course Registration
+Route::post('/courses/{course}/register', [App\Http\Controllers\Admin\CourseRegistrationController::class, 'store'])->name('courses.register');
+
+// Public Partnership Request
+Route::post('/partnership-request', function (Illuminate\Http\Request $request) {
+    $validated = $request->validate([
+        'organization_name' => 'required|string|max:255',
+        'contact_person' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'required|string|max:255',
+        'country' => 'required|string|max:255',
+        'partnership_type' => 'required|in:School,University,NGO,Embassy,Investor',
+        'message' => 'required|string',
+    ]);
+
+    App\Models\PartnershipRequest::create($validated);
+
+    return redirect()->back()->with('success', 'Partnership request submitted successfully. We will contact you soon.');
+})->name('partnership.request');
+
+// Public Contact Message
+Route::post('/contact', function (Illuminate\Http\Request $request) {
+    $validated = $request->validate([
+        'full_name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'nullable|string|max:255',
+        'subject' => 'required|string|max:255',
+        'message' => 'required|string',
+    ]);
+    
+    $contactMessage = App\Models\ContactMessage::create($validated);
+    
+    // Send email notification
+    try {
+        Mail::to('info@lacfontaine.org')->send(new App\Mail\ContactMessageNotification($contactMessage));
+    } catch (\Exception $e) {
+        \Log::error('Failed to send contact message email: ' . $e->getMessage());
+    }
+
+    return redirect()->back()->with('success', 'Message sent successfully. We will get back to you soon.');
+})->name('contact.submit');

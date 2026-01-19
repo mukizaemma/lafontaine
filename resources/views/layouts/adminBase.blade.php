@@ -5,8 +5,10 @@
 <head>
     @php
     $data = App\Models\Setting::first();
+    $setting = $data; // Make $setting available for sidebar and other views
     @endphp
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $data->company ?? '' }} - Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">

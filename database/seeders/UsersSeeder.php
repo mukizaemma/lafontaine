@@ -17,9 +17,10 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'Supper Admin',
+            'name' => 'Super Admin',
             'user_id' => Str::uuid(),
-            'role' => 1, 
+            'role' => 'admin', 
+            'status' => 'active',
             'email' => 'admin@iremetech.com',
             'password' => Hash::make('Ireme@2021'), 
             'remember_token' => Str::random(10),

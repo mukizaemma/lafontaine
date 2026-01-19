@@ -12,22 +12,21 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //View::share('categories', Category::with('blogs')->oldest()->get());
         //View::share('slides', Slide::oldest()->get());
         //View::share('programs', Program::oldest()->get());
-        //View::share('setting', Setting::first());
+        
+        // Share setting with all admin views
+        View::composer('admin.*', function ($view) {
+            $view->with('setting', Setting::first());
+        });
     }
 }

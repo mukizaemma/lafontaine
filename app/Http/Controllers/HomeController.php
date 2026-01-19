@@ -26,6 +26,11 @@ use App\Models\Bookcomment;
 use Illuminate\Http\Request;
 use App\Models\ReaderBookRead;
 use App\Models\Podcastcategory;
+use App\Models\Home;
+use App\Models\HeroSection;
+use App\Models\Page;
+use App\Models\Course;
+use App\Models\ImpactStat;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -43,24 +48,27 @@ class HomeController extends Controller
         }
 
         $setting = Setting::first();
-        $home = Aboutus::first();
+        $home = Home::first();
+        $aboutus = Aboutus::first();
         $slides = Slide::oldest()->get();
-        $books = book::latest()->get();
-        //$categories = Category::with('blogs')->oldest()->get();
-        //$blogs = Blog::with('category')->where('status', 'Published')->latest()->limit(6)->get();
-        //$blogsAll = Blog::where('status', 'Published')->latest()->paginate(6);
-        //$podcasts = Podcast::latest()->paginate(6);
+        $books = Book::where('status', 'available')->latest()->limit(6)->get();
+        $heroSection = HeroSection::where('is_active', true)->first();
+        $courses = Course::where('status', 'active')->latest()->limit(6)->get();
+        $impactStats = ImpactStat::latest()->limit(4)->get();
+        $categories = Category::with('blogs')->oldest()->get();
+        $blogs = Blog::with('category')->where('status', 'Published')->latest()->limit(6)->get();
 
         return view('front.index',[
             'setting'=>$setting,
             'slides'=>$slides,
             'home'=>$home,
+            'aboutus'=>$aboutus,
             'books'=>$books,
-            //'blogs'=>$blogs,
-            //'blogsAll'=>$blogsAll,
-            //'podcasts'=>$podcasts,
-            //'categories'=>$categories,
-            
+            'heroSection'=>$heroSection,
+            'courses'=>$courses,
+            'impactStats'=>$impactStats,
+            'categories'=>$categories,
+            'blogs'=>$blogs,
         ]);
 
     }
@@ -324,7 +332,6 @@ class HomeController extends Controller
 
 public function aboutus(){
     $setting = Setting::first();
-    $girlchess = Girlchess::first();
     $categories = Category::with('blogs')->oldest()->get();
     $about = About::first();
     $staff = Team::oldest()->get();
@@ -332,7 +339,6 @@ public function aboutus(){
     $events= Event::where('status','Published')->latest()->paginate(2);
     return view('front.about',[
         'setting'=>$setting,
-        'girlchess'=>$girlchess,
         'categories'=>$categories,
         'staff'=>$staff,
         'events'=>$events,
@@ -391,6 +397,8 @@ public function connect(){
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'guest',
+            'status' => 'active',
         ]);
         return redirect()->back()->with('success','User Created');
     }
@@ -419,6 +427,14 @@ public function connect(){
         ]);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+            
+            // Redirect admins and editors to dashboard
+            if ($user->isAdminOrEditor() && $user->status === 'active') {
+                return redirect()->route('dashboard')->with('success', 'Welcome back!');
+            }
+            
+            // Normal users (guests) stay on public pages but can see "My Courses" button
             return redirect()->back()->with('success', 'You are logged in successfully!');
         }
 
@@ -555,5 +571,46 @@ public function connect(){
         }
     }
 
+    // Show CMS Page
+    public function showPage($slug)
+    {
+        $page = Page::where('slug', $slug)->where('is_published', true)->firstOrFail();
+        $setting = Setting::first();
+        
+        return view('front.page', [
+            'page' => $page,
+            'setting' => $setting,
+        ]);
+    }
+
+    // Courses Index
+    public function coursesIndex()
+    {
+        $courses = Course::where('status', 'active')->latest()->get();
+        $setting = Setting::first();
+        
+        return view('front.courses', [
+            'courses' => $courses,
+            'setting' => $setting,
+        ]);
+    }
+
+    // Show Single Course
+    public function showCourse($id)
+    {
+        $course = Course::where('id', $id)->where('status', 'active')->firstOrFail();
+        $relatedCourses = Course::where('id', '!=', $course->id)
+            ->where('status', 'active')
+            ->latest()
+            ->limit(3)
+            ->get();
+        $setting = Setting::first();
+        
+        return view('front.course', [
+            'course' => $course,
+            'relatedCourses' => $relatedCourses,
+            'setting' => $setting,
+        ]);
+    }
 
 }

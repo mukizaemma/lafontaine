@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <h1>Reset Password</h1>
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
@@ -19,13 +19,17 @@
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
 
-            <div class="block">
+            <div>
                 <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <x-button>
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('signin') }}">
+                    {{ __('Back to login') }}
+                </a>
+
+                <x-button class="ml-4">
                     {{ __('Email Password Reset Link') }}
                 </x-button>
             </div>

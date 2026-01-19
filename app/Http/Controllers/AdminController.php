@@ -60,7 +60,8 @@ class AdminController extends Controller
 
     public function makeAdmin($id){
         $user = User::find($id);
-        $user->role = '1';
+        $user->role = 'admin';
+        $user->status = 'active';
         $user->save();
 
         return redirect()->back()->with('success','User is now an admin');

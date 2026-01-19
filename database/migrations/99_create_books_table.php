@@ -11,6 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Ensure users table exists before creating books
+        if (!Schema::hasTable('users')) {
+            throw new \Exception('users table must exist before creating books table');
+        }
+        
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -31,9 +36,17 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->enum('status', ['Active', 'Inactive','Soldout'])->default('Active');
 
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
             $table->softDeletes();
             $table->timestamps();
+        });
+        
+        // Add foreign key separately after table creation
+        Schema::table('books', function (Blueprint $table) {
+            $table->foreign('user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
         });
     }
 

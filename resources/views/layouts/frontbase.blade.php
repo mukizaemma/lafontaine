@@ -51,18 +51,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
-                <a href="{{ route('home') }}" class="nav-item nav-link">About</a>
+                <a href="{{ route('home') }}" class="nav-item nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+                <a href="{{ route('about') }}" class="nav-item nav-link {{ request()->routeIs('about') ? 'active' : '' }}">About</a>
                 <div class="nav-item dropdown">
-                    <a href="{{ route('home') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                     <div class="dropdown-menu fade-down m-0">
-                        <a href="{{ route('home') }}" class="dropdown-item">Our Team</a>
+                        <a href="{{ route('courses.index') }}" class="dropdown-item">Courses</a>
+                        <a href="{{ route('books') }}" class="dropdown-item">Books & Publications</a>
+                        <a href="{{ route('programs') }}" class="dropdown-item">Programs</a>
                     </div>
                 </div>
-                <a href="{{ route('home') }}" class="nav-item nav-link">Books</a>
-                <a href="{{ route('home') }}" class="nav-item nav-link">Contact</a>
+                <a href="{{ route('courses.index') }}" class="nav-item nav-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">Courses</a>
+                <a href="{{ route('books') }}" class="nav-item nav-link {{ request()->routeIs('books') ? 'active' : '' }}">Books</a>
+                <a href="{{ route('connect') }}" class="nav-item nav-link {{ request()->routeIs('connect') ? 'active' : '' }}">Contact</a>
             </div>
-            <a href="{{ route('home') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Get Your Book Now<i class="fa fa-arrow-right ms-3"></i></a>
+            <a href="{{ route('courses.index') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Enroll Now<i class="fa fa-arrow-right ms-3"></i></a>
         </div>
     </nav>
     <!-- Navbar End -->
@@ -75,31 +78,100 @@
     <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-white mb-3">Quick Link</h4>
-                    <a class="btn btn-link" href="{{ route('home') }}">About Us</a>
-                    <a class="btn btn-link" href="{{ route('home') }}">Contact Us</a>
-                    <a class="btn btn-link" href="{{ route('home') }}">Books</a>
-                    <a class="btn btn-link" href="{{ route('home') }}">Privacy & Terms</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-white mb-3">Contact</h4>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>{{ $setting->address ?? '' }}</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>{{ $setting->phone ?? '' }} </p>
-                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>{{ $setting->email ?? '' }}</p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-outline-light btn-social" href="{{ $setting->twitter ?? '' }}" targe="_blank"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-light btn-social" href="{{ $setting->facebook ?? '' }}" targe="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light btn-social" href="{{ $setting->linkedin ?? '' }}" targe="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <div class="col-lg-6 col-md-6">
+                    <h4 class="text-white mb-4">Quick Links</h4>
+                    <div class="d-flex flex-column">
+                        <a class="btn btn-link text-white-50 text-start px-0 mb-2" href="{{ route('home') }}" style="text-decoration: none;">Home</a>
+                        <a class="btn btn-link text-white-50 text-start px-0 mb-2" href="{{ route('about') }}" style="text-decoration: none;">About Us</a>
+                        <a class="btn btn-link text-white-50 text-start px-0 mb-2" href="{{ route('connect') }}" style="text-decoration: none;">Contact Us</a>
+                        <a class="btn btn-link text-white-50 text-start px-0 mb-2" href="{{ route('books') }}" style="text-decoration: none;">Books</a>
+                        <a class="btn btn-link text-white-50 text-start px-0 mb-2" href="{{ route('courses.index') }}" style="text-decoration: none;">Courses</a>
+                        <a class="btn btn-link text-white-50 text-start px-0 mb-2" href="{{ route('programs') }}" style="text-decoration: none;">Programs</a>
+                        <a class="btn btn-link text-white-50 text-start px-0 mb-2" href="{{ route('home') }}" style="text-decoration: none;">Privacy & Terms</a>
                     </div>
                 </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-white mb-3">Newsletter</h4>
-                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                <div class="col-lg-6 col-md-6">
+                    <h4 class="text-white mb-4">Contact</h4>
+                    
+                    <!-- Phone Numbers with Call and WhatsApp Icons -->
+                    <div class="mb-4">
+                        <h6 class="text-white-50 mb-3" style="font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Phone Numbers</h6>
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="text-white me-3" style="min-width: 150px;">+250781791424</span>
+                                <a href="tel:+250781791424" class="btn btn-sm btn-outline-light me-2" title="Call" style="padding: 4px 10px;">
+                                    <i class="fa fa-phone-alt"></i>
+                                </a>
+                                <a href="https://wa.me/250781791424" target="_blank" class="btn btn-sm btn-outline-light" title="WhatsApp" style="padding: 4px 10px;">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="text-white me-3" style="min-width: 150px;">+254715475270</span>
+                                <a href="tel:+254715475270" class="btn btn-sm btn-outline-light me-2" title="Call" style="padding: 4px 10px;">
+                                    <i class="fa fa-phone-alt"></i>
+                                </a>
+                                <a href="https://wa.me/254715475270" target="_blank" class="btn btn-sm btn-outline-light" title="WhatsApp" style="padding: 4px 10px;">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="text-white me-3" style="min-width: 150px;">+254112684191</span>
+                                <a href="tel:+254112684191" class="btn btn-sm btn-outline-light me-2" title="Call" style="padding: 4px 10px;">
+                                    <i class="fa fa-phone-alt"></i>
+                                </a>
+                                <a href="https://wa.me/254112684191" target="_blank" class="btn btn-sm btn-outline-light" title="WhatsApp" style="padding: 4px 10px;">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="text-white me-3" style="min-width: 150px;">+254721957842</span>
+                                <a href="tel:+254721957842" class="btn btn-sm btn-outline-light me-2" title="Call" style="padding: 4px 10px;">
+                                    <i class="fa fa-phone-alt"></i>
+                                </a>
+                                <a href="https://wa.me/254721957842" target="_blank" class="btn btn-sm btn-outline-light" title="WhatsApp" style="padding: 4px 10px;">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if($setting->email)
+                        <div class="mb-3">
+                            <h6 class="text-white-50 mb-2" style="font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Email</h6>
+                            <p class="mb-0">
+                                <a href="mailto:{{ $setting->email }}" class="text-white text-decoration-none">
+                                    <i class="fa fa-envelope me-2"></i>{{ $setting->email }}
+                                </a>
+                            </p>
+                        </div>
+                    @endif
+                    @if($setting->website)
+                        <div class="mb-4">
+                            <h6 class="text-white-50 mb-2" style="font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Website</h6>
+                            <p class="mb-0">
+                                <a href="{{ $setting->website }}" target="_blank" class="text-white text-decoration-none">
+                                    <i class="fa fa-globe me-2"></i>{{ $setting->website }}
+                                </a>
+                            </p>
+                        </div>
+                    @endif
+                    <div class="d-flex pt-2">
+                        @if($setting->twitter)
+                            <a class="btn btn-outline-light btn-social me-2" href="{{ $setting->twitter }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                        @endif
+                        @if($setting->facebook)
+                            <a class="btn btn-outline-light btn-social me-2" href="{{ $setting->facebook }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        @endif
+                        @if($setting->linkedin)
+                            <a class="btn btn-outline-light btn-social me-2" href="{{ $setting->linkedin }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        @endif
+                        @if($setting->instagram)
+                            <a class="btn btn-outline-light btn-social me-2" href="{{ $setting->instagram }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                        @endif
+                        @if($setting->youtube)
+                            <a class="btn btn-outline-light btn-social me-2" href="{{ $setting->youtube }}" target="_blank"><i class="fab fa-youtube"></i></a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -131,6 +203,11 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/250781791424" target="_blank" class="whatsapp-float" title="Chat with us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -142,6 +219,84 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <style>
+        /* Floating WhatsApp Button Styles */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 20px;
+            left: 20px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #20ba5a;
+            transform: scale(1.1);
+            color: #FFF;
+            text-decoration: none;
+        }
+
+        .whatsapp-float i {
+            margin-top: 0;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Footer Quick Links Hover Effect */
+        .footer .btn-link {
+            transition: all 0.3s ease;
+        }
+
+        .footer .btn-link:hover {
+            color: #06BBCC !important;
+            padding-left: 8px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                bottom: 15px;
+                left: 15px;
+            }
+
+            .footer .d-flex.align-items-center {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+
+            .footer .d-flex.align-items-center span {
+                margin-bottom: 8px;
+                min-width: auto !important;
+            }
+        }
+    </style>
 </body>
 
 </html>

@@ -17,10 +17,11 @@
         </div>
         <div class="navbar-nav w-100">
             <a href="{{ route('dashboard') }}" class="nav-item nav-link active"><i class="fas fa-grip-horizontal me-2"></i>Dashboard</a>
-             
-            <a href="{{ route('aboutPage') }}" class="nav-item nav-link"> <i class="fas fa-home me-2"></i>Our Story</a>
+            
+            <a href="{{ route('homePage') }}" class="nav-item nav-link"><i class="fas fa-home me-2"></i>Homepage Content</a>
+            <a href="{{ route('aboutPage') }}" class="nav-item nav-link"> <i class="fas fa-info-circle me-2"></i>About/Company Content</a>
             <a href="{{ route('getPrograms') }}" class="nav-item nav-link"> <i class="fa fa-clipboard me-2"></i>Programs</a>
-            <a href="{{ route('getBlogs') }}" class="nav-item nav-link"> <i class="fa fa-tags me-2"></i>articles</a>
+            <a href="{{ route('getBlogs') }}" class="nav-item nav-link"> <i class="fa fa-tags me-2"></i>Articles</a>
             <a href="{{ route('getBooks') }}" class="nav-item nav-link"> <i class="fa fa-book me-2"></i>Books</a>
 
             <a href="{{ route('subscribers') }}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Readers</a>

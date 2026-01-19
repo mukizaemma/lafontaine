@@ -27,10 +27,11 @@ class Book extends Model
         'reads',
         'buyers',
         'pdf_file',
-        'cover_image',
+        'file_url',
         'buy_url',
-        'status',
-        'status',
+        'isbn',
+        'level',
+        'published_year',
         'user_id',
         'category_id',
     ];
@@ -59,5 +60,10 @@ class Book extends Model
     {
         return $this->belongsToMany(Reader::class, 'reader_books', 'book_id', 'reader_id')
                     ->withPivot('times_read'); // Ensure the pivot table also has the 'times_read' column
+    }
+
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class, 'book_authors');
     }
 }

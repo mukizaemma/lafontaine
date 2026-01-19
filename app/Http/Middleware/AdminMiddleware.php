@@ -16,9 +16,10 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->check()) {
-            $userRole = auth()->user()->role;
+            $user = auth()->user();
     
-            if ($userRole == '1' || $userRole == '2') {
+            // Check if user is admin or editor
+            if ($user->isAdminOrEditor() && $user->status === 'active') {
                 return $next($request);
             }
         }

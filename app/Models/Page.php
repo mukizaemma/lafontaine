@@ -12,11 +12,14 @@ class Page extends Model
     protected $table = "pages";
 
     protected $fillable = [
-        'cpage_idption',
-        'user_id',
+        'slug',
         'title',
-        'description',
-        'image',
+        'content',
+        'is_published',
+    ];
+
+    protected $casts = [
+        'is_published' => 'boolean',
     ];
 
     function images(){

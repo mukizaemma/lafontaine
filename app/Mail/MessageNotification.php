@@ -22,7 +22,7 @@ class MessageNotification extends Mailable
     public function build()
     {
         return $this->from(config('mail.from.address'), config('mail.from.name'))
-        ->replyTo('info@raisehopecommunity.org')
+        ->replyTo('info@lacfontaine.org')
         ->subject('New Message')
         ->view('emails.messageNotification');
 

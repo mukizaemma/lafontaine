@@ -29,6 +29,8 @@ class User extends Authenticatable
         'email',
         'user_id',
         'password',
+        'role',
+        'status',
     ];
 
     /**
@@ -50,7 +52,33 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => 'string',
+        'status' => 'string',
     ];
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is editor
+     */
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor';
+    }
+
+    /**
+     * Check if user is admin or editor
+     */
+    public function isAdminOrEditor(): bool
+    {
+        return in_array($this->role, ['admin', 'editor']);
+    }
 
     /**
      * The accessors to append to the model's array form.

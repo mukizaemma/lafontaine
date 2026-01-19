@@ -16,7 +16,10 @@ class Setting extends Model
         'address',
         'email',
         'phone',
-        'address',
+        'phone_2',
+        'phone_3',
+        'phone_4',
+        'website',
         'logo',
         'deliveryInfo',
         'facebook',
@@ -25,5 +28,7 @@ class Setting extends Model
         'youtube',
         'linkedin',
         'quote',
+        'title',
+        'keywords',
     ];
 }
