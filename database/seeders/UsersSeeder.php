@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Super Admin',
             'user_id' => Str::uuid(),
-            'role' => 'admin', 
+            'role' => 'super_admin',
             'status' => 'active',
             'email' => 'admin@iremetech.com',
             'password' => Hash::make('Ireme@2021'), 

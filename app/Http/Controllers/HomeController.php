@@ -428,12 +428,20 @@ public function connect(){
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            
+
+            if ($user->status !== 'active') {
+                Auth::logout();
+
+                return redirect()->back()->withErrors([
+                    'login' => 'This account has been disabled.',
+                ]);
+            }
+
             // Redirect admins and editors to dashboard
-            if ($user->isAdminOrEditor() && $user->status === 'active') {
+            if ($user->isAdminOrEditor()) {
                 return redirect()->route('dashboard')->with('success', 'Welcome back!');
             }
-            
+
             // Normal users (guests) stay on public pages but can see "My Courses" button
             return redirect()->back()->with('success', 'You are logged in successfully!');
         }

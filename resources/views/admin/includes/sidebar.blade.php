@@ -27,7 +27,7 @@
             <a href="{{ route('subscribers') }}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Readers</a>
             <a href="{{ route('setting') }}" class="nav-item nav-link"> <i class="fas fa-hashtag me-2"></i>Settings</a>
 
-            @if(Auth::user()->email == 'admin@iremetech.com' )
+            @if(Auth::user()->isSuperAdmin())
             <a href="{{ route('users') }}" class="nav-item nav-link"><i class="fa fa-users me-2"></i> Users</a>
             @endif
         </div>

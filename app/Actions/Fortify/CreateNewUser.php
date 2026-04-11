@@ -33,7 +33,7 @@ class CreateNewUser implements CreatesNewUsers
             'name' => $input['name'],
             'email' => $input['email'],
             'userName' => $input['email'],
-            'role' => 0,
+            'role' => 'guest',
             'user_id' => Uuid::uuid4(),
             'password' => Hash::make($input['password']),
         ]);

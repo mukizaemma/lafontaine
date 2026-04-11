@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use App\Models\Articlecomment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Password;
 use App\Mail\CommentApprovalNotification;
 use App\Models\BlogComment;
 use App\Models\Book;
@@ -58,13 +60,66 @@ class AdminController extends Controller
         ]);
     }
 
-    public function makeAdmin($id){
-        $user = User::find($id);
+    public function makeAdmin($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->isSuperAdmin()) {
+            return redirect()->back()->with('error', 'Cannot change the super admin account.');
+        }
+
         $user->role = 'admin';
         $user->status = 'active';
         $user->save();
 
-        return redirect()->back()->with('success','User is now an admin');
+        return redirect()->back()->with('success', 'User is now an admin');
+    }
+
+    public function resetUserPassword(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'password' => ['required', 'string', Password::defaults(), 'confirmed'],
+        ]);
+
+        $user->password = Hash::make($validated['password']);
+        $user->save();
+
+        return redirect()->back()->with('success', 'Password updated for '.$user->email.'.');
+    }
+
+    public function toggleUserLogin(User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return redirect()->back()->with('error', 'Super admin accounts cannot be restricted.');
+        }
+
+        if (Auth::id() === $user->id) {
+            return redirect()->back()->with('error', 'You cannot change your own login access here.');
+        }
+
+        $user->status = $user->status === 'active' ? 'inactive' : 'active';
+        $user->save();
+
+        $message = $user->status === 'active'
+            ? 'Login access enabled for '.$user->email.'.'
+            : 'Login access restricted for '.$user->email.'.';
+
+        return redirect()->back()->with('success', $message);
+    }
+
+    public function destroyUser(User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return redirect()->back()->with('error', 'Cannot delete the super admin account.');
+        }
+
+        if (Auth::id() === $user->id) {
+            return redirect()->back()->with('error', 'Cannot delete your own account.');
+        }
+
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User removed.');
     }
 
 

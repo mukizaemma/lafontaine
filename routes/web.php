@@ -4,12 +4,17 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 
 
+Route::middleware(['auth', 'admin', 'super_admin'])->group(function () {
+    Route::get('/Users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
+    Route::get('/Users/{id}', [App\Http\Controllers\AdminController::class, 'makeAdmin'])->name('makeAdmin');
+    Route::post('/Users/{user}/reset-password', [App\Http\Controllers\AdminController::class, 'resetUserPassword'])->name('users.resetPassword');
+    Route::post('/Users/{user}/toggle-login', [App\Http\Controllers\AdminController::class, 'toggleUserLogin'])->name('users.toggleLogin');
+    Route::delete('/Users/{user}', [App\Http\Controllers\AdminController::class, 'destroyUser'])->name('users.destroy');
+});
+
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
     Route::get('/logouts', [App\Http\Controllers\AdminController::class, 'logouts'])->name('logouts');
-    Route::get('/Users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
-    Route::get('/Users/{id}', [App\Http\Controllers\AdminController::class, 'makeAdmin'])->name('makeAdmin');
-
 
     Route::get('/Comments', [App\Http\Controllers\AdminController::class, 'blogsComment'])->name('blogsComment');
     Route::post('/Comment/approve/{comment}', [App\Http\Controllers\AdminController::class, 'commentApprove'])->name('commentApprove');

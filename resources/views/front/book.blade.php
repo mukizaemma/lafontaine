@@ -36,7 +36,7 @@
             <div class="col-lg-8 mb-5">
                 <div class="book-content">
                     <h2 class="mb-4">Book Description</h2>
-                    <div class="content-text mb-4">
+                    <div class="content-text book-description-html mb-4">
                         {!! $book->description !!}
                     </div>
                     
@@ -152,6 +152,32 @@
         line-height: 1.8;
         color: #555;
         font-size: 1.1rem;
+    }
+
+    .book-description-html p {
+        margin-bottom: 1rem;
+    }
+    .book-description-html ul,
+    .book-description-html ol {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+    }
+    .book-description-html h1,
+    .book-description-html h2,
+    .book-description-html h3,
+    .book-description-html h4 {
+        margin-top: 1.25rem;
+        margin-bottom: 0.75rem;
+        font-weight: 700;
+    }
+    .book-description-html img,
+    .book-description-html video {
+        max-width: 100%;
+        height: auto;
+    }
+    .book-description-html a {
+        color: #06BBCC;
+        text-decoration: underline;
     }
     
     .book-info {

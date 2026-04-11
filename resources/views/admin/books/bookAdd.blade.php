@@ -149,7 +149,7 @@
                                         <div class="row mb-3">
                                             <div class="col-12">
                                                 <label for="description" class="form-label">Book Description</label>
-                                                <textarea id="description" rows="5" class="form-control" name="description" placeholder="Write a short book description..."></textarea>
+                                                <textarea id="description" rows="5" class="form-control summernote-book" name="description" placeholder="Write a short book description..."></textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -203,7 +203,17 @@
 }
 
 textarea {
-    resize: none;
+    resize: vertical;
+}
+
+/* Summernote toolbar / popovers above Bootstrap 5 modal */
+.modal .note-editor.note-frame {
+    border-radius: 6px;
+}
+.modal .note-modal,
+.modal .note-popover,
+.modal .dropdown-menu.note-menu {
+    z-index: 1065;
 }
 
 .form-actions .btn {

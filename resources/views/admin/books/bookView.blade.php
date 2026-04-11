@@ -76,9 +76,9 @@
                                     <div class="row mb-4">
                                         <div class="col-lg-6 col-sm-12">
                                             <h4 class="form-label">Book Description</h4>
-                                            <p>
-                                            {!!$book->description!!}
-                                            </p>
+                                            <div class="book-description-html border rounded p-3 bg-light" style="line-height:1.7;">
+                                            {!! $book->description !!}
+                                            </div>
 
                                         </div>
                                         <div class="col-lg-6 col-sm-12">
@@ -127,4 +127,10 @@
         <!-- Content End -->
 
         @include('admin.includes.footer')
+
+<style>
+.book-description-html p { margin-bottom: 0.75rem; }
+.book-description-html ul, .book-description-html ol { padding-left: 1.25rem; margin-bottom: 0.75rem; }
+.book-description-html img { max-width: 100%; height: auto; }
+</style>
  @endsection

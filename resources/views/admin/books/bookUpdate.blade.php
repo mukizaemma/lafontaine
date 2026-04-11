@@ -75,7 +75,7 @@
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         <label for="description" class="form-label">Book Description</label>
-                                        <textarea id="description" rows="5" class="form-control" name="description" placeholder="Write a short book description...">{{ old('description', $book->description) }}</textarea>
+                                        <textarea id="description" rows="5" class="form-control summernote-book" name="description" placeholder="Write a short book description...">{{ old('description', $book->description) }}</textarea>
                                     </div>
                                 </div>
 
@@ -117,4 +117,11 @@
         <!-- Content End -->
 
         @include('admin.includes.footer')
+
+<style>
+/* Rich text preview / editor consistency */
+.note-editor.note-frame .note-editing-area .note-editable {
+    min-height: 180px;
+}
+</style>
  @endsection
